@@ -6,7 +6,9 @@
 * Author: Brian Luna
 * Copyright 2020 Codefactor
 */
+
 namespace App\Http\Controllers\personal;
+
 use DB;
 use App\Classes\table;
 use App\Classes\permission;
@@ -17,19 +19,19 @@ use App\Http\Controllers\Controller;
 
 class PersonalProfileController extends Controller
 {
-	public function index() 
+	public function index()
 	{
-        $id = \Auth::user()->reference;
+		$id = \Auth::user()->reference;
 		$profile = table::people()->where('id', $id)->first();
 		$company_data = table::companydata()->where('reference', $id)->first();
 		$profile_photo = table::people()->select('avatar')->where('id', $id)->value('avatar');
 		$leavetype = table::leavetypes()->get();
 		$leavegroup = table::leavegroup()->get();
 
-        return view('personal.personal-profile-view', compact('profile', 'company_data', 'profile_photo', 'leavetype', 'leavegroup'));
-    }
-	   
-	public function profileEdit() 
+		return view('personal.personal-profile-view', compact('profile', 'company_data', 'profile_photo', 'leavetype', 'leavegroup'));
+	}
+
+	public function profileEdit()
 	{
 		$id = \Auth::user()->reference;
 		$person_details = table::people()->where('id', $id)->first();
@@ -37,7 +39,7 @@ class PersonalProfileController extends Controller
 		return view('personal.edits.personal-profile-edit', compact('person_details'));
 	}
 
-	public function profileUpdate(Request $request) 
+	public function profileUpdate(Request $request)
 	{
 		$v = $request->validate([
 			'lastname' => 'required|alpha_dash_space|max:155',
@@ -88,8 +90,6 @@ class PersonalProfileController extends Controller
 			'homeaddress' => $homeaddress,
 		]);
 
-    	return redirect('personal/profile/view')->with('success', trans("Updated!"));
+		return redirect('personal/profile/view')->with('success', trans("Updated!"));
 	}
-
 }
-

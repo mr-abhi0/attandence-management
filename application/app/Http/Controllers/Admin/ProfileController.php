@@ -6,7 +6,9 @@
 * Author: Brian Luna
 * Copyright 2020 Codefactor
 */
+
 namespace App\Http\Controllers\admin;
+
 use DB;
 use App\Classes\table;
 use App\Classes\permission;
@@ -20,10 +22,12 @@ use App\Http\Controllers\Controller;
 class ProfileController extends Controller
 {
 
-    public function view($id, Request $request)
-    {
-		if (permission::permitted('employees-view')=='fail'){ return redirect()->route('denied'); }
-		
+	public function view($id, Request $request)
+	{
+		if (permission::permitted('employees-view') == 'fail') {
+			return redirect()->route('denied');
+		}
+
 		$p = table::people()->where('id', $id)->first();
 		$c = table::companydata()->where('reference', $id)->first();
 		$i = table::people()->select('avatar')->where('id', $id)->value('avatar');
@@ -31,20 +35,24 @@ class ProfileController extends Controller
 		$leavetype = table::leavetypes()->get();
 		$leavegroup = table::leavegroup()->get();
 
-        return view('admin.profile-view', compact('p', 'c', 'i', 'iji', 'leavetype', 'leavegroup'));
-    }
+		return view('admin.profile-view', compact('p', 'c', 'i', 'iji', 'leavetype', 'leavegroup'));
+	}
 
-   	public function delete($id, Request $request)
-    {
-		if (permission::permitted('employees-delete')=='fail'){ return redirect()->route('denied'); }
+	public function delete($id, Request $request)
+	{
+		if (permission::permitted('employees-delete') == 'fail') {
+			return redirect()->route('denied');
+		}
 
 		return view('admin.delete-employee', compact('id'));
-   	}
+	}
 
-	public function clear(Request $request) 
+	public function clear(Request $request)
 	{
-		if (permission::permitted('employees-delete')=='fail'){ return redirect()->route('denied'); }
-		
+		if (permission::permitted('employees-delete') == 'fail') {
+			return redirect()->route('denied');
+		}
+
 		$id = $request->id;
 		table::people()->where('id', $id)->delete();
 		table::companydata()->where('reference', $id)->delete();
@@ -56,20 +64,24 @@ class ProfileController extends Controller
 		return redirect('employees')->with('success', trans("Employee information has been deleted!"));
 	}
 
-   	public function archive($id, Request $request)
-    {
-		if (permission::permitted('employees-archive')=='fail'){ return redirect()->route('denied'); }
+	public function archive($id, Request $request)
+	{
+		if (permission::permitted('employees-archive') == 'fail') {
+			return redirect()->route('denied');
+		}
 
 		$id = $request->id;
 		table::people()->where('id', $id)->update(['employmentstatus' => 'Archived']);
 		table::users()->where('reference', $id)->update(['status' => '0']);
 
-    	return redirect('employees')->with('success', trans("Employee information has been archived!"));
-   	}
+		return redirect('employees')->with('success', trans("Employee information has been archived!"));
+	}
 
 	public function editPerson($id)
-    {
-		if (permission::permitted('employees-edit')=='fail'){ return redirect()->route('denied'); }
+	{
+		if (permission::permitted('employees-edit') == 'fail') {
+			return redirect()->route('denied');
+		}
 
 		$company_details = table::companydata()->where('id', $id)->first();
 		$person_details = table::people()->where('id', $id)->first();
@@ -77,14 +89,16 @@ class ProfileController extends Controller
 		$department = table::department()->get();
 		$jobtitle = table::jobtitle()->get();
 		$leavegroup = table::leavegroup()->get();
-		$e_id = ($person_details->id == null) ? 0 : Crypt::encryptString($person_details->id) ;
+		$e_id = ($person_details->id == null) ? 0 : Crypt::encryptString($person_details->id);
 
-        return view('admin.edits.edit-personal-info', compact('company_details', 'person_details', 'company', 'department', 'jobtitle', 'leavegroup', 'e_id'));
-    }
+		return view('admin.edits.edit-personal-info', compact('company_details', 'person_details', 'company', 'department', 'jobtitle', 'leavegroup', 'e_id'));
+	}
 
-    public function updatePerson(Request $request)
-    {
-		if (permission::permitted('employees-edit')=='fail'){ return redirect()->route('denied'); }
+	public function updatePerson(Request $request)
+	{
+		if (permission::permitted('employees-edit') == 'fail') {
+			return redirect()->route('denied');
+		}
 
 		$v = $request->validate([
 			'id' => 'required|max:200',
@@ -141,21 +155,29 @@ class ProfileController extends Controller
 		$dateregularized = date("Y-m-d", strtotime($request->dateregularized));
 
 		$file = $request->file('image');
-		if ($file != null) 
-		{
+		if ($file != null) {
 			$name = $request->file('image')->getClientOriginalName();
 			$destinationPath = public_path() . '/assets/faces/';
 			$file->move($destinationPath, $name);
 		} else {
 			$name = table::people()->where('id', $id)->value('avatar');
 		}
-			$files = $request->file('joining_image');
+		// $jfile = $request->file('joining_image');
+		// if ($jfile != null) {
+		// 	$jname = $request->file('joining_image')->getClientOriginalName();
+		// 	$destinationsPath = public_path() . '/assets/form/';
+		// 	$jfile->move($destinationsPath, $jname);
+		// } else {
+		// 	$jname = table::people()->where('id', $id)->value('joining_image');
+		// }
+		$files = $request->file('joining_image');
+
 		if ($files != null) {
 			$jname = $request->file('joining_image')->getClientOriginalName();
-			$destinationsPath = public_path() . '/assets/form/';
-			$files->move($destinationsPath, $jname);
+			$destinationPath = public_path() . '/assets/form/';
+			$files->move($destinationPath, $jname);
 		} else {
-			$jname = table::people()->where('id', $id)->value('joining_image');
+			$jname = '';
 		}
 
 		table::people()->where('id', $id)->update([
@@ -190,11 +212,11 @@ class ProfileController extends Controller
 			'startdate' => $startdate,
 			'dateregularized' => $dateregularized,
 		]);
-		
-    	return redirect('profile/edit/'.$id)->with('success', trans("Employee information has been updated!"));
-   	}
 
-	public function viewProfile(Request $request) 
+		return redirect('profile/edit/' . $id)->with('success', trans("Employee information has been updated!"));
+	}
+
+	public function viewProfile(Request $request)
 	{
 		$id = \Auth::user()->id;
 		$myuser = table::users()->where('id', $id)->first();
@@ -203,28 +225,27 @@ class ProfileController extends Controller
 		return view('admin.update-profile', compact('myuser', 'myrole'));
 	}
 
-	public function viewPassword() 
+	public function viewPassword()
 	{
 		return view('admin.update-password');
 	}
 
-	public function updateUser(Request $request) 
+	public function updateUser(Request $request)
 	{
 
 		$v = $request->validate([
-            'name' => 'required|max:100',
-            'email' => 'required|email|max:100',
+			'name' => 'required|max:100',
+			'email' => 'required|email|max:100',
 		]);
-		
+
 		$id = \Auth::id();
 		$name = mb_strtoupper($request->name);
 		$email = mb_strtolower($request->email);
 
-		if($id == null) 
-        {
-            return redirect('personal/update-user')->with('error', trans("Whoops! Please fill the form completely."));
+		if ($id == null) {
+			return redirect('personal/update-user')->with('error', trans("Whoops! Please fill the form completely."));
 		}
-		
+
 		table::users()->where('id', $id)->update([
 			'name' => $name,
 			'email' => $email,
@@ -233,13 +254,13 @@ class ProfileController extends Controller
 		return redirect('update-profile')->with('success', trans("Updated!"));
 	}
 
-	public function updatePassword(Request $request) 
+	public function updatePassword(Request $request)
 	{
 
 		$v = $request->validate([
-            'currentpassword' => 'required|max:100',
-            'newpassword' => 'required|min:8|max:100',
-            'confirmpassword' => 'required|min:8|max:100',
+			'currentpassword' => 'required|max:100',
+			'newpassword' => 'required|min:8|max:100',
+			'confirmpassword' => 'required|min:8|max:100',
 		]);
 
 		$id = \Auth::id();
@@ -248,18 +269,15 @@ class ProfileController extends Controller
 		$n_password = $request->newpassword;
 		$c_p_password = $request->confirmpassword;
 
-		if($id == null) 
-        {
-            return redirect('personal/update-user')->with('error', trans("Whoops! Please fill the form completely."));
+		if ($id == null) {
+			return redirect('personal/update-user')->with('error', trans("Whoops! Please fill the form completely."));
 		}
 
-		if($n_password != $c_p_password) 
-		{
+		if ($n_password != $c_p_password) {
 			return redirect('update-password')->with('error', trans("New password does not match!"));
 		}
 
-		if(Hash::check($c_password, $p)) 
-		{
+		if (Hash::check($c_password, $p)) {
 			table::users()->where('id', $id)->update([
 				'password' => Hash::make($n_password),
 			]);
@@ -269,6 +287,4 @@ class ProfileController extends Controller
 			return redirect('update-password')->with('error', trans("Oops! current password does not match."));
 		}
 	}
-
-
-} 
+}

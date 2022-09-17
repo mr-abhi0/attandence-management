@@ -65,14 +65,14 @@
 
                         </div>
                         <div class="col-md-12 mb-2">
-                              <div class="author">
-                            @if($i != null)
-                            <img class="avatar border-white" src="{{ asset('/assets/faces/'.$i) }}" alt="profile photo" />
-                            @else
-                            <img class="avatar border-white" src="{{ asset('/assets/images/faces/default_user.jpg') }}" alt="profile photo" />
-                            @endif
+                            <div class="author">
+                                @if($i != null)
+                                <img class="avatar border-white" src="{{ asset('/assets/faces/'.$i) }}" alt="profile photo" />
+                                @else
+                                <img class="avatar border-white" src="{{ asset('/assets/images/faces/default_user.jpg') }}" alt="profile photo" />
+                                @endif
+                            </div>
                         </div>
-                        </div> 
                         <div class=" col">
                             <p id="messagewrap">
                                 <span id="type"></span><br>
@@ -86,12 +86,13 @@
             </div>
         </div>
 
-<div class="col">
-<h3 class="box-title ">{{ __('Recent Attendances') }}</h3>
+        <div class="col">
+            <h3 class="box-title ">{{ __('Recent Attendances') }}</h3>
             <div class="box-body border border-dark">
                 <table style=" font-weight: bolder; color: black;" class="table responsive nobordertop" id="dataTables-example">
                     <thead>
-                        <tr><th class="text-left">{{ __('DP Code') }}</th>
+                        <tr>
+                            <th class="text-left">{{ __('DP Code') }}</th>
                             <th class="text-left">{{ __('Name') }}</th>
                             <th class="text-left">{{ __('TimeIn') }}</th>
                             <th class="text-left">{{ __('TimeOut') }}</th>
@@ -100,11 +101,20 @@
                     <tbody>
                         @isset($a)
                         @foreach($a as $v)
-                       
+
                         <tr>
+                            <td>
+                                <div class="author">
+                                    @if($i != null)
+                                    <img class="avatar border-white" width="50px" src="{{ asset('/assets/faces/'.$i) }}" alt="profile photo" />
+                                    @else
+                                    <img class="avatar border-white" width="50px" src="{{ asset('/assets/images/faces/default_user.jpg') }}" alt="profile photo" />
+                                    @endif
+                                </div>
+                            </td>
                             <td class="name-title">{{ $v->idno }}</td>
                             <td class="name-title">{{ $v->employee }}</td>
-                             <td>
+                            <td>
                                 @php
                                 if($v->timein != null) {
                                 if($tf == 1) {
@@ -127,7 +137,7 @@
                                 @endphp
                             </td>
                         </tr>
-                       @endforeach
+                        @endforeach
                         @endisset
                     </tbody>
                 </table>
@@ -235,11 +245,12 @@
     });
 
     $('#btnclockin').click(function(event) {
-        var url, type, idno, comment;
+        var url, type, idno, comment, pics;
         url = $("#_url").val();
         type = $('.btnclock.active').data("type");
         idno = $('input[name="idno"]').val();
         idno.toUpperCase();
+
         comment = $('textarea[name="comment"]').val();
 
         $.ajax({

@@ -27,8 +27,8 @@ Route::group(['middleware' => 'auth'], function () {
 		|--------------------------------------------------------------------------
 		*/
 		Route::get('clock', 'ClockController@clock');
-		Route::post('attendance/add', 'ClockController@add'); 
-		
+		Route::post('attendance/add', 'ClockController@add');
+
 
 		Route::group(['middleware' => 'admin'], function () {
 			/*
@@ -37,7 +37,7 @@ Route::group(['middleware' => 'auth'], function () {
 			|--------------------------------------------------------------------------
 			*/
 			Route::get('/', 'Admin\DashboardController@index');
-			Route::get('dashboard', 'Admin\DashboardController@index')->name('dashboard');	
+			Route::get('dashboard', 'Admin\DashboardController@index')->name('dashboard');
 
 
 			/*
@@ -77,7 +77,7 @@ Route::group(['middleware' => 'auth'], function () {
 			Route::post('attendance/add-entry', 'Admin\AttendanceController@addEntry');
 			Route::get('attendance/filter', 'Admin\AttendanceController@getFilter');
 
-			
+
 			/*
 			|--------------------------------------------------------------------------
 			| Employee Schedules 
@@ -100,7 +100,7 @@ Route::group(['middleware' => 'auth'], function () {
 			Route::get('leaves/edit/{id}', 'Admin\LeavesController@edit');
 			Route::get('leaves/delete/{id}', 'Admin\LeavesController@delete');
 			Route::post('leaves/update', 'Admin\LeavesController@update');
-			
+
 
 			/*
 			|--------------------------------------------------------------------------
@@ -129,7 +129,7 @@ Route::group(['middleware' => 'auth'], function () {
 			Route::get('users/roles/permissions/edit/{id}', 'Admin\RolesController@editperm');
 			Route::post('users/roles/permissions/update', 'Admin\RolesController@updateperm');
 
-			
+
 			/*
 			|--------------------------------------------------------------------------
 			| Update User 
@@ -213,7 +213,7 @@ Route::group(['middleware' => 'auth'], function () {
 			Route::get('export/fields/department', 'Admin\ExportsController@department');
 			Route::get('export/fields/jobtitle', 'Admin\ExportsController@jobtitle');
 			Route::get('export/fields/leavetypes', 'Admin\ExportsController@leavetypes');
-			
+
 			// import
 			Route::post('import/fields/company', 'Admin\ImportsController@importCompany');
 			Route::post('import/fields/department', 'Admin\ImportsController@importDepartment');
@@ -222,7 +222,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 			// import options
 			Route::post('import/options', 'Admin\ImportsController@opt');
-			
+
 			// reports export
 			Route::get('export/report/employees', 'Admin\ExportsController@employeeList');
 			Route::post('export/report/attendance', 'Admin\ExportsController@attendanceReport');
@@ -272,9 +272,7 @@ Route::group(['middleware' => 'auth'], function () {
 			Route::post('personal/update/user', 'Personal\PersonalAccountController@updateUser');
 			Route::post('personal/update/password', 'Personal\PersonalAccountController@updatePassword');
 		});
-
 	});
-
 });
 
 

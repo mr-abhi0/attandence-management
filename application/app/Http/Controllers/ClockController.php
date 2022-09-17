@@ -20,7 +20,7 @@ use App\Http\Controllers\Controller;
 class ClockController extends Controller
 {
 
-    public function clock()
+    public function clock(Request $request)
     {
         $data = table::settings()->where('id', 1)->first();
         $cc = $data->clock_comment;
@@ -31,10 +31,34 @@ class ClockController extends Controller
             ->latest('created_at')
             ->take(8)
             ->get();
-        $i = table::people()->select('avatar')->where('id')->value('avatar');
 
-        return view('clock', compact('cc', 'tz', 'tf', 'a', 'i', 'rfid'));
+        // $id = ($request->idno);
+
+        $empid = strtoupper($request->idno);
+        $employee_id = table::companydata()->where('idno', $empid)->value('reference');
+        $i = table::people()->select('avatar')->where('id', $employee_id)->value('avatar');
+        // if ($request->id == NULL) {
+        //     return response()->view($i);
+        // }
+
+
+        // if ($empid != null) {
+        //     return response()->view($i);
+        // }
+
+
+        return view('clock', compact('cc', 'tz', 'tf', 'a', 'i', 'empid', 'rfid'));
     }
+
+
+    // public function usrimg(Request $request)
+    // {
+    //     $empid = strtoupper($request->idno);
+    //     $employees_id = table::companydata()->where('idno', $empid)->value('reference');
+    //     $it = table::people()->select('avatar')->where('id', $employees_id)->value('avatar');
+    // }
+
+
 
     public function add(Request $request)
     {
@@ -95,7 +119,7 @@ class ClockController extends Controller
         $emp = table::people()->where('id', $employee_id)->first();
         $lastname = $emp->lastname;
         $firstname = $emp->firstname;
-        $userimg = $emp->avatar;
+
         $mi = $emp->mi;
         $employee = mb_strtoupper($firstname . ' ' . $lastname . '  ' . $mi);
 

@@ -47,9 +47,9 @@
                     </table>
                     </p>
                 </div>
- <div class="author">
+                <div class="author">
                     <div class="box-header with-border">{{ __('Joining Form') }}</div>
-                   
+
                     @if($iji != null)
                     <a class="ui positive large icon button" href="{{ asset('/assets/form/'.$iji) }}">Your Joining Data</a> @else
                     <a class="ui positive large icon button" href="{{ asset('/assets/images/faces/default_user.jpg') }}"> Dummy Data</a></a>
@@ -81,7 +81,7 @@
                                     <p>@isset($p->age) {{ $p->age }} @endisset</p>
                                 </td>
                             </tr>
-                           
+
                             <tr>
                                 <td>
                                     <p>{{ __('Gender') }}</p>
@@ -147,7 +147,7 @@
                                 <td>{{ __('Position') }}</td>
                                 <td>@isset($c->jobposition) {{ $c->jobposition }} @endisset</td>
                             </tr>
-                           
+
                             <tr>
                                 <td>
                                     <p>{{ __('Employment Type') }}</p>
