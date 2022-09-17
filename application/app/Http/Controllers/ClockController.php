@@ -119,6 +119,7 @@ class ClockController extends Controller
         $emp = table::people()->where('id', $employee_id)->first();
         $lastname = $emp->lastname;
         $firstname = $emp->firstname;
+        $profilepic = $emp->avatar;
 
         $mi = $emp->mi;
         $employee = mb_strtoupper($firstname . ' ' . $lastname . '  ' . $mi);
@@ -133,6 +134,7 @@ class ClockController extends Controller
 
                 return response()->json([
                     "employee" => $employee,
+                    "profilepic" => $profilepic,
                     "error" => trans("You already Time In today at") . " " . $hti_24,
                 ]);
             } else {
@@ -140,6 +142,7 @@ class ClockController extends Controller
 
                 if ($last_in_notimeout >= 1) {
                     return response()->json([
+                        "profilepic" => $profilepic,
                         "error" => trans("Please Clock Out from your last Clock In.")
                     ]);
                 } else {
@@ -191,6 +194,7 @@ class ClockController extends Controller
                         "firstname" => $firstname,
                         "lastname" => $lastname,
                         "mi" => $mi,
+                        "profilepic" => $profilepic,
                     ]);
                 }
             }
@@ -204,6 +208,7 @@ class ClockController extends Controller
 
             if ($timeIN == NULL) {
                 return response()->json([
+                    "profilepic" => $profilepic,
                     "error" => trans("Please Clock In before Clocking Out.")
                 ]);
             }
@@ -215,6 +220,7 @@ class ClockController extends Controller
 
                 return response()->json([
                     "employee" => $employee,
+                    "profilepic" => $profilepic,
                     "error" => trans("You already Time Out today at") . " " . $hto_24,
                 ]);
             } else {
@@ -254,6 +260,7 @@ class ClockController extends Controller
                     "firstname" => $firstname,
                     "lastname" => $lastname,
                     "mi" => $mi,
+                    "profilepic" => $profilepic,
                 ]);
             }
         }

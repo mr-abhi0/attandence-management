@@ -65,12 +65,11 @@
 
                         </div>
                         <div class="col-md-12 mb-2">
-                            <div class="author">
-                                @if($i != null)
-                                <img class="avatar border-white" src="{{ asset('/assets/faces/'.$i) }}" alt="profile photo" />
-                                @else
-                                <img class="avatar border-white" src="{{ asset('/assets/images/faces/default_user.jpg') }}" alt="profile photo" />
-                                @endif
+                            <div class="author" >
+                               
+                                <img id="profilepic" width="100px" height="100px" class="avatar border-white" src="{{ asset('/assets/images/faces/default_user.jpg') }}" alt="profile photo" />
+
+                              
                             </div>
                         </div>
                         <div class=" col">
@@ -103,15 +102,6 @@
                         @foreach($a as $v)
 
                         <tr>
-                            <td>
-                                <div class="author">
-                                    @if($i != null)
-                                    <img class="avatar border-white" width="50px" src="{{ asset('/assets/faces/'.$i) }}" alt="profile photo" />
-                                    @else
-                                    <img class="avatar border-white" width="50px" src="{{ asset('/assets/images/faces/default_user.jpg') }}" alt="profile photo" />
-                                    @endif
-                                </div>
-                            </td>
                             <td class="name-title">{{ $v->idno }}</td>
                             <td class="name-title">{{ $v->employee }}</td>
                             <td>
@@ -222,6 +212,7 @@
                     $('.message-after').removeClass("ok");
                     $('#message').text(response['error']);
                     $('#fullname').text(response['employee']);
+                     $("#profilepic").attr('src', '{{asset("/assets/faces/")}}/' + response ['profilepic']);
                     $('.message-after').slideToggle().slideDown('400');
                 } else {
                     function type(clocktype) {
@@ -237,6 +228,7 @@
                     $('#time').html("").show();
                     $('#type').text(type(response['type']));
                     $('#fullname').text(response['firstname'] + ' ' + response['lastname']);
+                     $("#profilepic").attr('src', '{{asset("/assets/faces/")}}/' + response ['profilepic']);
                     $('#time').html('<span id=clocktime>' + response['time'] + '</span>' + '.' + '<span id=clockstatus> {{ __("Success!") }}</span>');
                     $('.message-after').slideToggle().slideDown('400');
                 }
@@ -274,6 +266,8 @@
                     $('.message-after').removeClass("ok");
                     $('#message').text(response['error']);
                     $('#fullname').text(response['employee']);
+                    console.log(response.profilepic);
+                     $("#profilepic").attr('src', '{{asset("/assets/faces/")}}/' + response ['profilepic']);
                     $('.message-after').slideToggle().slideDown('400');
                 } else {
                     function type(clocktype) {
@@ -288,7 +282,11 @@
                     $('#type, #fullname, #message').text("").show();
                     $('#time').html("").show();
                     $('#type').text(type(response['type']));
+                    console.log(response.profilepic);
                     $('#fullname').text(response['firstname'] + ' ' + response['lastname']);
+                    // $("#profilepic").append('<img src="'+ response['profilepic'] +'">');
+                     $("#profilepic").attr('src', '{{asset("/assets/faces/")}}/' + response ['profilepic']);
+                    // {{ asset('/assets/faces/'.$i) }} + response['profilepic'] +
                     $('#time').html('<span id=clocktime>' + response['time'] + '</span>' + '.' + '<span id=clockstatus> {{ __("Success!") }}</span>');
                     $('.message-after').slideToggle().slideDown('400');
                 }
